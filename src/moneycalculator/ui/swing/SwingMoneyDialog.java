@@ -27,6 +27,7 @@ import moneycalculator.ui.MoneyDialog;
  * @author usuario
  */
 public class SwingMoneyDialog extends JPanel implements MoneyDialog {
+
     private final Currency[] currencies;
     private Currency currency;
     private String amount;
@@ -37,11 +38,9 @@ public class SwingMoneyDialog extends JPanel implements MoneyDialog {
         this.add(currency());
     }
 
-    
-    
     @Override
     public Money get() {
-           return new Money(Double.parseDouble(amount), currency);
+        return new Money(Double.parseDouble(amount), currency);
     }
 
     private Component amount() {
@@ -58,18 +57,26 @@ public class SwingMoneyDialog extends JPanel implements MoneyDialog {
         currency = (Currency) combo.getSelectedItem();
         return combo;
     }
-
-
+    
+        private Currency[] currencies() {
+        return new Currency[]{
+            new Currency("USD", "Dolar USA", "$"),
+            new Currency("CAD", "Dolar Canada", "$"),
+            new Currency("GBP", "Libra esterlina", "£")
+        };
+    }
 
     private ItemListener currencyChange() {
-        return new ItemListener(){
+        return new ItemListener() {
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.DESELECTED) return;
+                if (e.getStateChange() == ItemEvent.DESELECTED) {
+                    return;
+                }
                 currency = (Currency) e.getItem();
             }
-        
+
         };
     }
 
@@ -83,12 +90,12 @@ public class SwingMoneyDialog extends JPanel implements MoneyDialog {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-            amountChanged(e.getDocument());
+                amountChanged(e.getDocument());
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-            amountChanged(e.getDocument());
+                amountChanged(e.getDocument());
             }
 
             private void amountChanged(Document document) {
@@ -100,5 +107,7 @@ public class SwingMoneyDialog extends JPanel implements MoneyDialog {
             }
         };
     }
-    
+
+
+
 }
