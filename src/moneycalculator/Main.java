@@ -6,6 +6,11 @@ package moneycalculator;
 
 import moneycalculator.control.CalculateCommand;
 import moneycalculator.model.Currency;
+import moneycalculator.model.ExchangeRate;
+import moneycalculator.persistence.CurrencyListLoader;
+import moneycalculator.persistence.ExchangeRateLoader;
+import moneycalculator.persistence.RestExchangeRateLoader;
+import moneycalculator.persistence.files.FileCurrencyListLoader;
 
 /**
  *
@@ -17,15 +22,9 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        MainFrame mainFrame = new MainFrame(currencies());
-        mainFrame.add(new CalculateCommand(mainFrame.getMoneyDialog(),
-                mainFrame.getMoneyDisplay()));
-    }
-
-    private static Currency[] currencies() {
-        return new Currency[]{
-            new Currency("USD", "Dolar USA", "$"),
-            new Currency("CAD", "Dolar Canada", "$"),
-            new Currency("GBP", "Libra esterlina", "£"),};
+        CurrencyListLoader currencyLoader = new FileCurrencyListLoader("currencies");
+        ExchangeRateLoader exchangeRateLoader = new RestExchangeRateLoader();
+        MainFrame mainFrame = new MainFrame(currencyLoader.currencies());
+        mainFrame.add(new CalculateCommand(mainFrame.getMoneyDialog(), mainFrame.getMoneyDisplay(), exchangeRateLoader));
     }
 }
